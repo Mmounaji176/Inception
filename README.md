@@ -83,6 +83,8 @@ Examples: Docker is a widely used container runtime, but there are others like c
    - **Use Case:** Improved resource tracking and control.
    - **Implementation:** Enhanced version of cgroups with improved hierarchy and resource accounting capabilities.
 
-Understanding these features at a deeper level helps in appreciating how container runtimes leverage the underlying Linux kernel capabilities to provide a secure, isolated, and efficient environment for running applications.
+# What are containers
+Containers are an abstraction at the app layer that packages code and dependencies together. Multiple containers can run on the same machine and share the OS kernel with other containers, each running as isolated processes in user space. Containers take up less space than VMs (container images are typically tens of MBs in size), can handle more applications and require fewer VMs and Operating systems.
+
 
 
