@@ -1,7 +1,13 @@
-FROM nginx:1.19.8
+FROM debian:buster
 
-COPY index.html /data/www/
-COPY ./conf/example.conf /etc/nginx/conf.d/example.conf
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY tools/script.sh /tmp/script.sh
+COPY conf/nginx.conf /tmp/nginx.conf
+COPY index.html /var/www/data/
 
-RUN
+RUN apt-get update && \
+    apt-get install -y nginx openssl && \
+    chmod +x /tmp/script.sh && /tmp/script.sh
+
+EXPOSE 443
+
+CMD [ "nginx", "-g", "daemon off;" ]
