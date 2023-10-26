@@ -49,13 +49,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./wordpress
+      device: ./wp_vol
   mariadb:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ./mariadb
+      device: ./mdb_vol
     
 networks:
   inception:

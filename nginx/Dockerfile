@@ -1,7 +1,7 @@
 FROM debian:buster
 
 COPY tools/script.sh /tmp/script.sh
-COPY conf/nginx.conf /tmp/nginx.conf
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY index.html /var/www/data/
 
 RUN apt-get update && \

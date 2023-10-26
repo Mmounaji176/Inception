@@ -5,7 +5,21 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 	-keyout "/etc/nginx/certs/server.key" -out "/etc/nginx/certs/server.crt" \
 	-subj "/CN=mmounaji.42.fr"
 
-cp /tmp/nginx.conf "/etc/nginx/conf.d/nginx.conf"
+cp /etc/nginx/nginx.conf "/etc/nginx/conf.d/nginx.conf"
+# Include Custom Configuration in the Nginx Configuration:
+# Instead of replacing the entire configuration file, you can include your custom configuration in the default configuration. This is a good approach if you only need to make a few changes. You can place your custom configuration file in a directory, and include it in the default configuration.
+
+# For example, in your Dockerfile:
+
+# Dockerfile
+# Copy code
+# FROM nginx:latest
+
+# # Copy your custom configuration to a separate directory
+# COPY nginx-custom.conf /etc/nginx/conf.d/nginx-custom.conf
+
+# # Modify the default configuration to include your custom configuration
+# RUN echo 'include /etc/nginx/conf.d/nginx-custom.conf;' > /etc/nginx/nginx.conf
 #openssl req: This command is part of the OpenSSL toolkit and is used for various tasks related to X.509 certificates.
 
 #-x509: This option specifies that the output should be a self-signed certificate.

@@ -1,22 +1,38 @@
 #!/bin/bash
 
-# Check if wp-config.php already exists; if not, configure WordPress
-if [ ! -e "/var/www/wordpress/wp-config.php" ]; then
-    wp config create --allow-root \
-        --dbname=$DB_NAME \
-        --dbuser=$DB_USER \
-        --dbpass=$DB_PASSWORD \
-        --dbhost=mariadb:3306 --path='/var/www/wordpress'
-fi
 
-# Run the configuration script (you may customize this part to suit your needs)
-wp core install --allow-root \
-    --url=$DOMAIN_NAME \
-    --title=$WP_URL \
-    --admin_user=$WP_ADMIN_USER \
-    --admin_password=$WP_ADMIN_PASSWORD \
-    --admin_email=$WP_ADMIN_EMAIL
 
-# Additional commands to configure WordPress go here
+# create directory to use in nginx container later and also to setup the wordpress conf
+mkdir /var/www/
+mkdir /var/www/html
 
+cd /var/www/html
+
+
+rm -rf *
+
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar 
+
+chmod +x wp-cli.phar 
+
+mv wp-cli.phar /usr/local/bin/wp
+
+
+wp core download --allow-root
+
+mv /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+
+mv /wp-config.php /var/www/html/wp-config.php
+
+
+sed -i -r "s/db1/$DB_NAME/1"   wp-config.php
+sed -i -r "s/user/$DB_USER/1"  wp-config.php
+sed -i -r "s/pwd/$DB_PWD/1"    wp-config.php
+
+wp core install --url=$DOMAIN_NAME/ --title=$WP_TITLE --admin_user=$WP_ADMIN_USR --admin_password=$WP_ADMIN_PWD --admin_email=$WP_ADMIN_EMAIL --skip-email --allow-root
+wp user create $WP_USER $WP_USER_EMAIL --role=author --user_pass=$WP_PWD --allow-root
+wp theme install astra --activate --allow-root
+wp plugin update --all --allow-root
+sed -i 's/listen = \/run\/php\/php7.3-fpm.sock/listen = 9000/g' /etc/php/7.3/fpm/pool.d/www.conf
+mkdir /run/php
 /usr/sbin/php-fpm7.3 -F
