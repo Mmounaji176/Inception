@@ -1,18 +1,11 @@
-build:
-	docker-compose build
+ALL:
+    docker compose ./srcs/requirements/dokcer-compose.yaml build
 
 up:
-	docker-compose up -d
+    docker compose ./srcs/requirements/dokcer-compose.yaml up
 
 down:
-	docker-compose down
+    docker compose ./srcs/requirements/dokcer-compose.yaml down
 
 clean:
-	docker-compose down -v
-push:
-	git add .
-	git commit -m inception
-	git push
-
-.PHONY:
-	build up down clean
+    docker volume rm $(docker volume ls -q)
