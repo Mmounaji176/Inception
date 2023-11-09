@@ -1,12 +1,26 @@
 version: "3"
 
 services:
-  nginx:
-    build: .srcs/requirements/nginx
-    container_name: nginx
-    image: nginx:1337
+  mariadb:
+    build: /Users/mmounaji/safi_baraka/srcs/requirements/mariadb
+    container_name: mariadb
+    image: mariadb:1337
     restart: always
-    volume:
+    volumes:
+      - mariadb:/var/lib/mysql/
+    networks:
+      - inception
+    expose:
+      - "3306"
+    env_file:
+      - .env
+  
+  wordpress:
+    build: /Users/mmounaji/safi_baraka/srcs/requirements/wordpress
+    container_name: wordpress
+    image: wordpress:1337
+    restart: always
+    volumes:
       - wordpress:/var/www/html/
     depends_on:
       - mariadb
@@ -15,32 +29,23 @@ services:
     networks:
       - inception
 
-  mariadb:
-    build: ./srcs/requirements/mariadb
-    container_name: mariadb
-    image: mariadb:1337
-    restart: always
-    volume:
-      - mariadb:/var/lib/mysql/
-    networks:
-      - inception
-    env_file:
-      - .env
   
-  wordpress:
-    build: .srcs/requirements/wordpress
-    container_name: wordpress
-    image: wordpress:1337
+  nginx:
+    build: /Users/mmounaji/safi_baraka/srcs/requirements/nginx
+    container_name: nginx
+    image: nginx:1337
     restart: always
-    volume:
+    volumes:
       - wordpress:/var/www/html/
     depends_on:
-      - mariadb
+      - wordpress
+    ports:
+      - "443:443"
     env_file:
       - .env
     networks:
       - inception
-  
+
 networks:
     inception:
       driver: bridge
@@ -50,11 +55,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device:  add
+      device:  /Users/mmounaji/safi_baraka/wordpress
       o: bind
   mariadb:
     driver: local
     driver_opts:
       type: none
-      device: add
+      device: /Users/mmounaji/safi_baraka/mariadb
       o: bind
