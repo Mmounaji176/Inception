@@ -7,11 +7,11 @@ services:
     image: mariadb:1337
     restart: always
     volumes:
-      - mariadb:/var/lib/mysql/
+      - mariadb:/var/lib/mysql
     networks:
       - inception
-    expose:
-      - "3306"
+    ports:
+      - "3306:3306"
     env_file:
       - .env
   
@@ -24,6 +24,8 @@ services:
       - wordpress:/var/www/html/
     depends_on:
       - mariadb
+    ports:
+       - "9000:9000"
     env_file:
       - .env
     networks:
@@ -48,6 +50,7 @@ services:
 
 networks:
     inception:
+      name: inception
       driver: bridge
 
 volumes:
@@ -55,11 +58,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device:  /Users/mmounaji/safi_baraka/wordpress
+      device:  /Users/mmounaji/safi_baraka/wordpress/
       o: bind
   mariadb:
     driver: local
     driver_opts:
       type: none
-      device: /Users/mmounaji/safi_baraka/mariadb
+      device: /Users/mmounaji/safi_baraka/mariadb/
       o: bind
