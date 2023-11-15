@@ -2,7 +2,7 @@ version: "3"
 
 services:
   mariadb:
-    build: /Users/mmounaji/safi_baraka/srcs/requirements/mariadb
+    build: ./requirements/mariadb
     container_name: mariadb
     image: mariadb:1337
     restart: always
@@ -16,7 +16,7 @@ services:
       - .env
   
   wordpress:
-    build: /Users/mmounaji/safi_baraka/srcs/requirements/wordpress
+    build: ./requirements/wordpress
     container_name: wordpress
     image: wordpress:1337
     restart: always
@@ -33,7 +33,7 @@ services:
 
   
   nginx:
-    build: /Users/mmounaji/safi_baraka/srcs/requirements/nginx
+    build: ./requirements/nginx
     container_name: nginx
     image: nginx:1337
     restart: always
@@ -58,11 +58,11 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device:  /Users/mmounaji/safi_baraka/wordpress/
+      device:  /home/mmounaji/data/wordpress/
       o: bind
   mariadb:
     driver: local
     driver_opts:
       type: none
-      device: /Users/mmounaji/safi_baraka/mariadb/
+      device: /home/mmounaji/data/mariadb/
       o: bind

@@ -10,4 +10,4 @@ RUN mkdir -p /etc/ssl/
 COPY ./tools/certificate.crt /etc/ssl/certs/
 COPY ./tools/private.key /etc/ssl/private/ 
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

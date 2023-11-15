@@ -1,29 +1,15 @@
 FROM debian:buster
 
-WORKDIR /var/www/html
 
-RUN apt-get update \
-    && apt-get install -y curl  \
-    && apt install -y php php-fpm php-mysql mariadb-client
+RUN apt update -y 
 
-RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
-    && php wp-cli.phar --info \
-    && chmod +x wp-cli.phar \
-    && mv wp-cli.phar /usr/local/bin/wp && mkdir /run/php/
+RUN apt install php-fpm php-mysql mariadb-client -y
+
+RUN apt install curl -y
 
 
-RUN wp core download --allow-root 
+COPY ./tools/script.sh /
+COPY ./conf/wp-config.php /
 
-RUN rm -rf /etc/php/7.3/fpm/pool.d/www.conf
-COPY ./conf/wp-config.php /tmp/
-COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 
-RUN service php7.3-fpm stop
-
-COPY ./tools/script.sh /bin/
-
-RUN chmod 777 /bin/script.sh
-
-EXPOSE 9000
-
-CMD ["script.sh"]
+ENTRYPOINT [ "/script.sh" ]

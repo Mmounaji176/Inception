@@ -4,6 +4,10 @@ COPY tools/script.sh /tmp/script.sh
 
 RUN apt-get update && apt-get install -y mariadb-server 
 
+COPY ./conf/mariadb.conf /etc/mysql/mariadb.conf.d/50-server.cnf 
+RUN chmod 644 /etc/mysql/mariadb.conf.d/50-server.cnf
+
 EXPOSE 3306
 
-CMD [ "sh", "/tmp/script.sh" ]
+ENTRYPOINT [ "sh", "/tmp/script.sh" ]
+
